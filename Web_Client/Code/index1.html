@@ -1,0 +1,501 @@
+<!doctype html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="A front-end template that helps you build fast, modern mobile web apps.">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+    <title>IRK Attendance System</title>
+
+    <!-- Add to homescreen for Chrome on Android -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <link rel="icon" sizes="192x192" href="images/android-desktop.png">
+
+    <!-- Add to homescreen for Safari on iOS -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-title" content="Material Design Lite">
+    <link rel="apple-touch-icon-precomposed" href="images/ios-desktop.png">
+
+    <!-- Tile icon for Win8 (144x144 + tile color) -->
+    <meta name="msapplication-TileImage" content="images/touch/ms-touch-icon-144x144-precomposed.png">
+    <meta name="msapplication-TileColor" content="#3372DF">
+
+    <link rel="shortcut icon" href="images/favicon.png">
+
+
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://code.getmdl.io/1.1.3/material.blue-light_blue.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+.demo-list-icon {
+  width: 600px;
+}
+</style>
+    <style>
+    #view-source {
+      position: fixed;
+      display: block;
+      right: 0;
+      bottom: 0;
+      margin-right: 40px;
+      margin-bottom: 40px;
+      z-index: 900;
+    }
+    </style>
+
+    <script
+      src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js">
+    </script>
+  <script type="text/javascript">
+    var url ="";
+          function postData(){
+              var xhr = null;
+              var cid = $('#classid').val();
+              var cname = $('#classname').val();
+              var bid = $('#bluetoothid').val();
+
+
+              if(window.XMLHttpRequest)
+  	            xhr = new XMLHttpRequest();
+              else if (window.ActiveXObject)
+  	            xhr  = new ActiveXObject(Microsoft.XMLHTTP);
+
+              xhr.onreadystatechange = function(){
+                                           if(xhr.readyState == 4 && xhr.status == 200)
+                                               alert("Class Created!");
+                                           else if(xhr.readyState == 4)
+                                               alert("Error: returned status code " + xhr.status + " " + xhr.statusText);
+                                       };
+                                var localurl = url+":3002/createclass/"+cid+"/"+cname+"/"+bid;
+                                console.log(localurl);
+              xhr.open("POST", localurl, true);
+              xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+              // Need to escape value because it has an equals sign
+              xhr.send();
+          }
+         function attList(){
+            var ab=$('#ch_user1').val();
+            alert(ab);
+            console.log("hi trial");
+            console.log("hi attlist");
+          //  var cattendance=document.getElementById('studentidatt').value;
+              var localurl=url+":3002/classattendance/"+ab;
+            console.log(localurl);
+            var xhr= new XMLHttpRequest();
+            xhr.open("GET", localurl, true);
+            xhr.send();
+
+            xhr.onreadystatechange = function() {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                console.log("helloo");
+                var disp_data="";
+                  var jsonresponse=JSON.parse(xhr.responseText);
+                    var len=jsonresponse.length;
+                    console.log(len);
+                    var finalbody="There are " +len+ "student(s) present" ;
+                    for(i=0;i<len;i++){
+                      disp_data+="<li class="+"mdl-list__item"+">  <span class="+"mdl-list__item-primary-content"+">  <i class="+"material-icons mdl-list__item-icon"+">person</i>" +  jsonresponse[i].value+  "</span></li>";
+
+                    }
+                      var disp_data1="<ul class="+"demo-list-icon mdl-list"+">";
+                      var fin=finalbody+"<br>"+disp_data1+disp_data;
+                  console.log(jsonresponse);
+                document.getElementById("result9").innerHTML = fin;
+              }
+            }
+
+
+    }
+    function clearAtt() {
+      var b=$('#ch_user2').val();
+
+      var localurl=url+":3002/clearclassattendance/"+b;
+      console.log(localurl);
+      var xhr= new XMLHttpRequest();
+      xhr.open("DELETE", localurl, true);
+      xhr.send();
+      xhr.onreadystatechange = function() {
+      if (xhr.readyState == 4 && xhr.status == 200) {
+        alert("Attendance cleared for class number "+b);
+    }
+}
+}
+
+
+          function enrList() {
+            var sid1 = $('#studentidenr').val();
+        //    var sid1=document.getElementById("studentidenr")
+            console.log(sid1);
+            var localurl=url+":3000/studentenrolled/"+sid1;
+            var xhr= new XMLHttpRequest();
+            xhr.open('GET', localurl, true);
+            xhr.send();
+            xhr.onreadystatechange = function() {
+              if (xhr.readyState == 4 && xhr.status == 200) {
+                console.log("hi");
+              var jsonresponse=JSON.parse(xhr.responseText);
+              console.log(jsonresponse.value.length);
+              var finalbody="The student is enrolled in " +jsonresponse.value.length +" classes";
+
+              var disp_data="";
+              for(i=0;i<jsonresponse.value.length;i++){
+              //  details += i+". "+jsonresponse.value[i] +"<br>";
+                disp_data+="<li class="+"mdl-list__item"+">  <span class="+"mdl-list__item-primary-content"+">  <i class="+"material-icons mdl-list__item-icon"+">all out</i>" +  jsonresponse.value[i]+  "</span></li>";
+                console.log(disp_data);
+              }
+              var disp_data1="<ul class="+"demo-list-icon mdl-list"+">";
+              var disp_data2=disp_data1+disp_data;
+              document.getElementById("result2").innerHTML = finalbody+"<br>"+disp_data2;
+
+          }
+        }
+      }
+
+
+
+          </script>
+
+
+
+    <script>
+    $(document).ready(function(){
+      $.ajax({
+              type: "GET",
+              url:"",
+              dataType: "json",
+              success: function (data) {
+                  $.each(data.rows,function(i,obj)
+                  {
+                //   alert(obj.key+":"+obj.value);
+                   var div_data="<option value="+obj.key+">"+obj.key+"</option>";
+                //  alert(div_data);
+                  $(div_data).appendTo('#ch_user1');
+                  });
+                  }
+            });
+            $.ajax({
+                    type: "GET",
+                    url:"",
+                    dataType: "json",
+                    success: function (data) {
+                        $.each(data.rows,function(i,obj)
+                        {
+                      //   alert(obj.key+":"+obj.value);
+                         var div_data="<option value="+obj.key+">"+obj.key+"</option>";
+                      //  alert(div_data);
+                        $(div_data).appendTo('#ch_user2');
+                        });
+                        }
+                  });
+
+
+            $("#astudents").click(function() {
+              var disp_data="";
+              var disp_data1="<ul class="+"demo-list-icon mdl-list"+">";
+
+                $.ajax({
+                  type:"GET",
+                  url: "",
+                  dataType:"json",
+                  success: function (data) {
+                    $.each(data.rows,function(i,obj)
+                    {
+                     disp_data+="<li class="+"mdl-list__item"+">  <span class="+"mdl-list__item-primary-content"+">  <i class="+"material-icons mdl-list__item-icon"+">person</i>" +  obj.value+ "&nbsp;&nbsp;&nbsp;&nbsp;"+obj.key+ "</span></li>";
+
+                  });
+                  var final=disp_data1+disp_data;
+                  console.log(disp_data);
+                    $(final).appendTo('#result1');
+                  }
+                });
+
+            });
+      $("#submitas").click(function() {
+        console.log("inside onclick");
+
+        var a=$("#regclasses").val();
+        console.log(a);
+        var length=a.length;
+        console.log(length);
+        var seperated=a.split(",");
+        var intArray = new Array();
+        for (var i = 0, length = seperated.length; i < length; i++) {
+            intArray[i] = parseInt(seperated[i]);
+
+    console.log(seperated[i]);
+      console.log(intArray[i]);
+    }
+    var b=$("#studentid").val();
+    var a=$("#studentname").val();
+    var data2={
+	    "studentid": parseInt(b),
+      	"regclasses": intArray,
+    	"studentname": a
+
+  	};
+    var fdata=JSON.stringify(data2);
+    console.log(fdata);
+    $.ajax({
+      type: "POST",
+      url:"3000/addstudent",
+      data:fdata,
+      contentType: "application/json; charset=utf-8",
+      dataType: "json",
+      error: function (err) {
+        console.log("AJAX error in request: " + JSON.stringify(err, null, 2));
+    },
+      success: function(result){
+        alert("success");
+      }
+    });
+
+
+});
+$("#submitd").click(function() {
+  console.log("inside onclick delete");
+    var deleteurl="3002/deleteclass";
+  var did=document.getElementById('dclassid');
+  var did1=$("#dclassid").val();
+  console.log(did1);
+  $.ajax({
+    url: "3002/deleteclass"+"/"+did1,
+    type: "DELETE",
+    crossDomain: true,
+      contentType: 'application/x-www-form-urlencoded',
+
+    success: function(){alert("success");},
+    error: function (err) {
+      console.log("AJAX error in request: " + JSON.stringify(err, null, 2));
+  }
+
+
+  });
+});
+});
+
+
+
+
+    </script>
+  </head>
+  <body class="mdl-demo mdl-color--grey-100 mdl-color-text--grey-500 mdl-base">
+    <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+      <header class="mdl-layout__header mdl-layout__header--scroll mdl-color--primary">
+        <div class="mdl-layout--large-screen-only mdl-layout__header-row">
+        </div>
+        <div class="mdl-layout--large-screen-only mdl-layout__header-row">
+          <h3>RASPBERRY JAM</h3>
+        </div>
+        <div class="mdl-layout--large-screen-only mdl-layout__header-row">
+        </div>
+        <div class="mdl-layout__tab-bar mdl-js-ripple-effect mdl-color--primary-dark">
+          <a href="#overview" class="mdl-layout__tab is-active">Overview</a>
+          <a href="#addclass" class="mdl-layout__tab">Add Class</a>
+          <a href="#deleteclass" class="mdl-layout__tab">Delete Class</a>
+          <a href="#addstudent" class="mdl-layout__tab">Add Student</a>
+          <a href="#classattendance" class="mdl-layout__tab">Class Attendance</a>
+          <a href="#allstudent" class="mdl-layout__tab">All Students</a>
+          <a href="#studentenrolled" class="mdl-layout__tab">Student Enrolled</a>
+          <a href="#clearattendance" class="mdl-layout__tab">Clear Class Attendance</a>
+
+
+    <!--      <button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored mdl-shadow--4dp mdl-color--accent" id="add">
+            <i class="material-icons" role="presentation">add</i> -->
+        <!--    <span class="visuallyhidden">Add</span>
+          </button> -->
+        </div>
+      </header>
+      <main class="mdl-layout__content">
+        <div class="mdl-layout__tab-panel is-active" id="overview">
+
+          <p>
+                              WELCOME! PLEASE SELECT ONE OF THE TABS TO PROCEED.</P>
+        </div>
+
+        <div class="mdl-layout__tab-panel" id="features">
+hello
+        </div>
+
+        <!-- add class tab starts here -->
+        <div class="mdl-layout__tab-panel" id="addclass">
+            <p>Here you can create a new class</p>
+          <div class="mdl-layout mdl-js-layout mdl-color--grey-100" style="align-items: center;justify-content: center;">
+
+	           <main class="mdl-layout__content">
+		             <div class="mdl-card mdl-shadow--6dp">
+			                <div class="mdl-card__title mdl-color--primary mdl-color-text--white">
+				                    <h2 class="mdl-card__title-text">ADD CLASS</h2>
+			                       </div>
+	  	                         <div class="mdl-card__supporting-text">
+				                             <form name ="createclass" id="createclass" >
+                  <div class="mdl-textfield mdl-js-textfield">
+						<input class="mdl-textfield__input" name = "classid" type="text" id="classid" />
+						<label class="mdl-textfield__label" for="classid">Class ID</label>
+					</div>
+					<div class="mdl-textfield mdl-js-textfield">
+						<input class="mdl-textfield__input" name = "classname" type="text" id="classname" />
+						<label class="mdl-textfield__label" for="classname">Class Name</label>
+					</div>
+          <div class="mdl-textfield mdl-js-textfield">
+    <input class="mdl-textfield__input" name = "bluetoothid" type="text" id="bluetoothid" />
+    <label class="mdl-textfield__label" for="bluetoothid">Bluetooth ID</label>
+  </div>
+
+  </form>
+			</div>
+			<div class="mdl-card__actions mdl-card--border">
+        <div class="form__input-submit">
+          <button type="submit" name="submit" onclick="postData();" class="btn btn-block">Submit</button>
+        </div>
+
+
+
+			</div>
+		</div>
+	</main>
+</div>
+        </div>
+        <div class="mdl-layout__tab-panel" id="deleteclass">
+          <p>Please enter the Class ID of which you wish to Delete </p>
+          <div class="mdl-layout mdl-js-layout mdl-color--grey-100" style="align-items: center;justify-content: center;">
+
+             <main class="mdl-layout__content">
+                 <div class="mdl-card mdl-shadow--6dp">
+                      <div class="mdl-card__title mdl-color--primary mdl-color-text--white">
+                            <h2 class="mdl-card__title-text">DELETE CLASS</h2>
+                             </div>
+                               <div class="mdl-card__supporting-text">
+                                     <form action="#">
+                  <div class="mdl-textfield mdl-js-textfield">
+            <input class="mdl-textfield__input" type="text" id="dclassid" />
+            <label class="mdl-textfield__label" for="dclassid">Class ID</label>
+          </div>
+
+
+        </form>
+      </div>
+      <div class="mdl-card__actions mdl-card--border">
+        <div class="form__input-submit">
+          <button type="submitd" name="submitd"  id="submitd" class="btn btn-block">Delete</button>
+        </div>
+
+
+
+      </div>
+    </div>
+  </main>
+</div>
+
+
+        </div>
+        <div class="mdl-layout__tab-panel" id="addstudent">
+          <p>To add a new student to be a part of the College, enter the details below</p>
+          <div class="mdl-layout mdl-js-layout mdl-color--grey-100" style="align-items: center;justify-content: center;">
+
+             <main class="mdl-layout__content">
+                 <div class="mdl-card mdl-shadow--6dp">
+                      <div class="mdl-card__title mdl-color--primary mdl-color-text--white">
+                            <h2 class="mdl-card__title-text">ADD STUDENT</h2>
+                             </div>
+                               <div class="mdl-card__supporting-text">
+                                <form  id"addingstudent" name="addingstudent" action="#" method="post">
+                  <div class="mdl-textfield mdl-js-textfield">
+            <input class="mdl-textfield__input" name="studentid" type="text" id="studentid" />
+            <label class="mdl-textfield__label" for="studentid">Student ID</label>
+          </div>
+          <div class="mdl-textfield mdl-js-textfield">
+						<input class="mdl-textfield__input" name = "regclasses" type="text" id="regclasses" />
+						<label class="mdl-textfield__label" for="regclasses">Class Numbers</label>
+					</div>
+          <div class="mdl-textfield mdl-js-textfield">
+    <input class="mdl-textfield__input" name = "studentname" type="text" id="studentname" />
+    <label class="mdl-textfield__label" for="studentname">Student Name</label>
+  </div>
+
+        </form>
+      </div>
+      <div class="mdl-card__actions mdl-card--border">
+        <button type="submit" name="submitas" value="submitas" id="submitas" class="btn btn-block">Add Student</button>
+
+  </button>
+      </div>
+      <pre id="result">
+      </pre>
+    </div>
+  </main>
+</div>
+        </div>
+
+          <div class="mdl-layout__tab-panel" id="allstudent">
+            Click,to view the list of all students currently enrolled in the college.
+            <button type="submit" name="astudents" value="astudents"  id="astudents" class="btn btn-block">View Students</button>
+            <p id="result1">
+
+            </p>
+          </div>
+          <div class="mdl-layout__tab-panel" id="studentenrolled">
+            Gives a list of all classes a student is enrolled in
+          <div class="mdl-layout mdl-js-layout mdl-color--grey-100" style="align-items: center;justify-content: center;">
+
+             <main class="mdl-layout__content">
+                 <div class="mdl-card mdl-shadow--6dp">
+                      <div class="mdl-card__title mdl-color--primary mdl-color-text--white">
+                            <h2 class="mdl-card__title-text"></h2>
+                             </div>
+                               <div class="mdl-card__supporting-text">
+                                <form  id"studenrolling" name="studenrolling" >
+                  <div class="mdl-textfield mdl-js-textfield">
+            <input class="mdl-textfield__input" name="studentidenr" type="text" id="studentidenr" />
+            <label class="mdl-textfield__label" for="studentidenr">Student ID</label>
+          </div>
+
+
+
+        </form>
+      </div>
+      <div class="mdl-card__actions mdl-card--border">
+        <button type="submit" name="submitenr" value="submitenr" onclick="enrList();" id="submitenr" class="btn btn-block">Submit</button>
+
+  </button>
+      </div>
+
+    </div><br><br><br><br>
+    <p id="result2">
+    </p>
+  </main>
+</div>
+</div>
+<div class="mdl-layout__tab-panel" id="classattendance">
+  <div id="div_source1">
+    <select id="ch_user1" >
+        <option value="select"></option>
+    </select>
+</div>
+<button type="submit"  name="btn_trial" value="Trial Button.." onclick="attList();" id="id_trial" class="btn btn-block">Get Attendance</button>
+<p id="result9">
+
+</p>
+</div>
+<div class="mdl-layout__tab-panel" id="clearattendance">
+  Please Select the class for which you want to clear the attendance<br><br>
+    <div id="div_source5">
+  <select id="ch_user2" >
+      <option value="Select"></option>
+  </select>
+</div>
+  <button type="submit"  name="clear_button" value="clear_button" onclick="clearAtt();" id="clear_button" class="btn btn-block">Clear Attendance</button>
+
+</div>
+
+
+      </main>
+    </div>
+
+    <script src="https://code.getmdl.io/1.1.3/material.min.js"></script>
+  </body>
+</html>
