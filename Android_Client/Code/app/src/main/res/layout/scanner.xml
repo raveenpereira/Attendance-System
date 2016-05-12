@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimary"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <ImageView
+        android:layout_width="200dp"
+        android:layout_height="150dp"
+        android:id="@+id/StockImage"
+        android:src="@drawable/logo"
+        android:layout_gravity="center_horizontal|top"
+        />
+    <Button
+        android:gravity="center_vertical|center_horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:textSize="20sp"
+        android:background="@color/colorAccent"
+        android:textColor="#ffffff"
+        android:id="@+id/clicker"
+        android:visibility="gone"
+        android:layout_marginTop="300dp"
+        android:text="Send"
+        android:layout_gravity="center_horizontal"
+        android:layout_alignParentEnd="true" />
+    <TextView
+        android:id="@+id/DisplayText"
+        android:text="No class detected.\nStart Bluetooth scan "
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="25sp"
+        android:textColor="#ffffff"
+        android:layout_gravity="center_horizontal"
+        android:layout_below="@+id/StockImage"
+        android:layout_centerHorizontal="true" />
+
+
+   <android.support.design.widget.FloatingActionButton
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:layout_gravity="bottom|end"
+       android:src="@drawable/ic_bluetooth_searching_white_48dp"
+       app:elevation="4dp"
+       android:id="@+id/scan"
+       android:background="@color/colorPrimary"
+       android:layout_margin="20dp"
+       />
+    <TextView
+        android:layout_width="100dp"
+        android:layout_height="25dp"
+        android:layout_gravity="top|right"
+        android:textColor="@color/cardview_light_background"
+        android:text="Sign Out"
+        android:textSize="20sp"
+        android:id="@+id/signOut"/>
+</android.support.design.widget.CoordinatorLayout>
